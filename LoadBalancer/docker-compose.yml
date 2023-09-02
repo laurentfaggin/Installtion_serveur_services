@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  proxy:
+    image: nginx:alpine # utilise la version la plus recente
+    ports:
+      - '80:80' # expose 80 sur l'hote et envoie a 80 dans le container
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+  web1:
+    image: httpd:alpine # utilise la version httpd:alpine
+    volumes:
+        - ./web1/html:/usr/local/apache2/htdocs/
+  web2:
+    image: httpd:alpine # utilise la version httpd:alpine
+    volumes:
+        - ./web2/html:/usr/local/apache2/htdocs/
+

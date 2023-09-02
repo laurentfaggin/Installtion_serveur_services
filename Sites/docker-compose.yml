@@ -1,0 +1,32 @@
+version: "3.2"
+
+services:
+  php:
+    build: './php/'
+    networks:
+        - backend
+    volumes:
+        - ./monsite/html:/srv/htdocs
+  apache:
+    build: './monsite/' # si necessaire construire l'image de l'info de repertoire
+    depends_on:
+        - php
+        - mariadb  
+    networks:
+        - frontend
+        - backend
+    ports:
+    #exposer 8080 sur l'hote et l'envoyer a 80 dans le conteneur
+        - '8080:80'
+        - '443:443'
+    volumes:
+        - ./monsite/html:/srv/htdocs  #lien avec le repertoire de Apache
+  mariadb:
+    image: mariadb
+    networks:
+        - backend
+    environment:
+        - MYSQL_ROOT_PASSWORD=rootpassword
+networks:
+    frontend:
+    backend:

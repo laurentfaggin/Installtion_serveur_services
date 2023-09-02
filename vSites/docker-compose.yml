@@ -1,0 +1,12 @@
+version: "3.2"
+
+services:
+  apache:
+    build:
+      context: .
+    ports:
+      - '80:80'
+    volumes:
+      - ./site01/html:/usr/local/apache2/site01.com/
+      - ./site02/html:/usr/local/apache2/site02.com/
+      - ./var/log/apache2/:/usr/local/apache2/logs/

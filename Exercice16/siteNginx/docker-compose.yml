@@ -1,0 +1,41 @@
+version: "3.2"
+
+services:
+  php:
+    build: './php/'
+    networks:
+        - backend
+    volumes:
+        - ./monsite/html:/usr/share/nginx/html
+  nginx:
+    image: nginx:alpine
+    depends_on:
+        - php
+        - mariadb  
+    networks:
+        - frontend
+        - backend
+    ports:
+    #exposer 8080 sur l'hote et l'envoyer a 80 dans le conteneur
+        - '80:80'
+        - '443:443'
+    volumes:
+        - ./monsite/html:/usr/share/nginx/html
+        - ./monsite/conf:/etc/nginx/conf.d 
+  mariadb:
+    image: mariadb
+    restart: always
+    networks:
+        - backend
+    environment:
+        - MYSQL_ROOT_PASSWORD=rootpassword
+    ports:
+        - '3306:3306'
+    volumes:
+        - dbdata:/var/lib/mysql
+
+networks:
+    frontend:
+    backend:
+volumes:
+    dbdata:
